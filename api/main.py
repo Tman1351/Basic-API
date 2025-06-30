@@ -3,9 +3,10 @@ import pandas as pd
 import sys
 import os
 import traceback
-
 import os
 from joblib import load
+
+app = Flask(__name__)
 
 
 def load_one(name):
@@ -24,9 +25,6 @@ def load_one(name):
 # Add the project root (Court Sense ai) to sys.path
 sys.path.append(os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..', '..')))
-
-
-app = Flask(__name__)
 
 
 @app.route("/basic-predict", methods=['POST'])
