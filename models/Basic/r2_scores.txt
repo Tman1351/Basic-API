@@ -1,0 +1,25 @@
+ast_pg_model.pkl with R2: 0.8404831690185723
+blk_pg_model.pkl with R2: 0.6593893401509765
+fg3a_pg_model.pkl with R2: 0.6930533563184514
+fga_pg_model.pkl with R2: 0.993231063156609
+fta_pg_model.pkl with R2: 0.9163842474755011
+gp_model.pkl with R2: 0.7099802494049072
+gs_model.pkl with R2: 0.8280407130751323
+height_model.pkl with R2: 0.7658951146454576
+min_pg_model.pkl with R2: 0.9352130995368398
+pts_pg_model.pkl with R2: 0.9981663126054079
+reb_pg_model.pkl with R2: 0.812180391822453
+tov_pg_model.pkl with R2: 0.8387658887275904
+ts_pct_model.pkl with R2: 0.8091180648441239
+
+Top 10 models with lowest R2 scores:
+blk_pg_model.pkl: 0.6594
+fg3a_pg_model.pkl: 0.6931
+gp_model.pkl: 0.7100
+height_model.pkl: 0.7659
+ts_pct_model.pkl: 0.8091
+reb_pg_model.pkl: 0.8122
+gs_model.pkl: 0.8280
+tov_pg_model.pkl: 0.8388
+ast_pg_model.pkl: 0.8405
+fta_pg_model.pkl: 0.9164
