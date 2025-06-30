@@ -90,16 +90,10 @@ def basic_predict():
 
         model = load_one(target)
 
-        if target == 'blk_pg':
-            input_order = [
-                'reb_pg', 'gp', 'gs', 'pts_pg', 'ast_pg', 'fga_pg',
-                'height', 'bodyWeight', 'fg3a_pg', 'fta_pg', 'tov_pg', 'min_pg', 'ts_pct'
-            ]
-        else:
-            input_order = [
-                'gp', 'gs', 'pts_pg', 'ast_pg', 'fga_pg', 'height',
-                'bodyWeight', 'fg3a_pg', 'fta_pg', 'tov_pg', 'min_pg', 'ts_pct'
-            ]
+        input_order = [
+            'reb_pg', 'gp', 'gs', 'pts_pg', 'ast_pg', 'fga_pg', 'height',
+            'bodyWeight', 'fg3a_pg', 'fta_pg', 'tov_pg', 'min_pg', 'ts_pct'
+        ]
 
         input_features = [col for col in input_order if col != target]
 
