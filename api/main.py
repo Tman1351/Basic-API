@@ -1,9 +1,25 @@
-from mmodule import load_one
 from flask import Flask, request, jsonify
 import pandas as pd
 import sys
 import os
 import traceback
+
+import os
+from joblib import load
+
+
+def load_one(name):
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    models_dir = os.path.join(base_dir, '..', 'models', 'Basic')
+
+    model_path = os.path.join(models_dir, f'{name}_model.pkl')
+    if not os.path.exists(model_path):
+        raise FileNotFoundError(f"❌ Missing model: {model_path}")
+    model, r2 = load(model_path)
+    model.r2 = r2
+    return model
+
 
 # Add the project root (Court Sense ai) to sys.path
 sys.path.append(os.path.abspath(os.path.join(
