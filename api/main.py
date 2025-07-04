@@ -276,7 +276,3 @@ def basic_predict():
         print(tb_str)
 
         return jsonify({'error': str(e), 'traceback': tb_str}), 500
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
