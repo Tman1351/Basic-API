@@ -14,128 +14,128 @@ import random
 STAT_RESPONSE_TEMPLATES = {
     "pts_pg": {
         "high": [
-            "Scoring machine! {val:.1f} points per game is elite.",
-            "{val:.1f} PPG? This player is lighting it up!"
+            "Scoring machine! {val:.2f} points per game is elite.",
+            "{val:.2f} PPG? This player is lighting it up!"
         ],
         "medium": [
-            "{val:.1f} points per game, a reliable scorer.",
-            "Solid scorer with {val:.1f} PPG."
+            "{val:.2f} points per game, a reliable scorer.",
+            "Solid scorer with {val:.2f} PPG."
         ],
         "low": [
-            "Scoring is light, just {val:.1f} per game.",
-            "{val:.1f} PPG might not move the needle."
+            "Scoring is light, just {val:.2f} per game.",
+            "{val:.2f} PPG might not move the needle."
         ]
     },
     "ast_pg": {
         "high": [
-            "This player’s got vision, {val:.1f} assists per game!",
-            "Playmaker alert: {val:.1f} APG."
+            "This player’s got vision, {val:.2f} assists per game!",
+            "Playmaker alert: {val:.2f} APG."
         ],
         "medium": [
-            "A decent distributor with {val:.1f} assists per game.",
-            "{val:.1f} APG, moving the ball well."
+            "A decent distributor with {val:.2f} assists per game.",
+            "{val:.2f} APG, moving the ball well."
         ],
         "low": [
-            "Not much of a passer, only {val:.1f} APG.",
-            "{val:.1f} assists per game, minimal playmaking."
+            "Not much of a passer, only {val:.2f} APG.",
+            "{val:.2f} assists per game, minimal playmaking."
         ]
     },
     "blk_pg": {
         "high": [
-            "A defensive wall, {val:.1f} blocks per game!",
-            "Shot blocker alert: {val:.1f} BPG."
+            "A defensive wall, {val:.2f} blocks per game!",
+            "Shot blocker alert: {val:.2f} BPG."
         ],
         "medium": [
-            "Respectable rim protection at {val:.1f} blocks.",
-            "Averaging {val:.1f} BPG, holding it down."
+            "Respectable rim protection at {val:.2f} blocks.",
+            "Averaging {val:.2f} BPG, holding it down."
         ],
         "low": [
-            "Just {val:.1f} blocks, not much rim protection.",
-            "This player doesn’t block much: {val:.1f} per game."
+            "Just {val:.2f} blocks, not much rim protection.",
+            "This player doesn’t block much: {val:.2f} per game."
         ]
     },
     "reb_pg": {
         "high": [
-            "Board beast! {val:.1f} rebounds a game.",
-            "{val:.1f} RPG — always cleaning the glass."
+            "Board beast! {val:.2f} rebounds a game.",
+            "{val:.2f} RPG — always cleaning the glass."
         ],
         "medium": [
-            "Decent rebounding with {val:.1f} per game.",
-            "Solid rebounder: {val:.1f} RPG."
+            "Decent rebounding with {val:.2f} per game.",
+            "Solid rebounder: {val:.2f} RPG."
         ],
         "low": [
-            "Light on rebounds — {val:.1f} per game.",
-            "{val:.1f} RPG — might need more hustle."
+            "Light on rebounds — {val:.2f} per game.",
+            "{val:.2f} RPG — might need more hustle."
         ]
     },
     "fga_pg": {
         "high": [
-            "{val:.1f} shots a game — volume scorer!",
-            "Letting it fly with {val:.1f} FGA per game."
+            "{val:.2f} shots a game — volume scorer!",
+            "Letting it fly with {val:.2f} FGA per game."
         ],
         "medium": [
-            "Takes a moderate {val:.1f} shots per game.",
-            "{val:.1f} FGA — knows when to shoot."
+            "Takes a moderate {val:.2f} shots per game.",
+            "{val:.2f} FGA — knows when to shoot."
         ],
         "low": [
-            "Only {val:.1f} shots a game — selective shooter.",
-            "Low volume: {val:.1f} FGA."
+            "Only {val:.2f} shots a game — selective shooter.",
+            "Low volume: {val:.2f} FGA."
         ]
     },
     "fg3a_pg": {
         "high": [
-            "Shooting from deep — {val:.1f} threes per game.",
-            "{val:.1f} 3PA — living beyond the arc!"
+            "Shooting from deep — {val:.2f} threes per game.",
+            "{val:.2f} 3PA — living beyond the arc!"
         ],
         "medium": [
-            "Comfortable from range, {val:.1f} 3PA.",
-            "Shooting some threes: {val:.1f} per game."
+            "Comfortable from range, {val:.2f} 3PA.",
+            "Shooting some threes: {val:.2f} per game."
         ],
         "low": [
-            "Rarely takes threes, only {val:.1f} per game.",
-            "Low 3-point volume: {val:.1f} 3PA."
+            "Rarely takes threes, only {val:.2f} per game.",
+            "Low 3-point volume: {val:.2f} 3PA."
         ]
     },
     "fta_pg": {
         "high": [
-            "Gets to the line often, {val:.1f} FTA per game.",
-            "{val:.1f} free throws per game, aggressive!"
+            "Gets to the line often, {val:.2f} FTA per game.",
+            "{val:.2f} free throws per game, aggressive!"
         ],
         "medium": [
-            "Draws some contact: {val:.1f} FTA.",
-            "{val:.1f} free throws per game — decent pressure."
+            "Draws some contact: {val:.2f} FTA.",
+            "{val:.2f} free throws per game — decent pressure."
         ],
         "low": [
-            "Doesn’t draw many fouls — {val:.1f} FTA.",
-            "Low free throw attempts: {val:.1f}."
+            "Doesn’t draw many fouls — {val:.2f} FTA.",
+            "Low free throw attempts: {val:.2f}."
         ]
     },
     "tov_pg": {
         "high": [
-            "Careless with the ball — {val:.1f} turnovers per game.",
-            "{val:.1f} TOV per game — turnover-prone."
+            "Careless with the ball — {val:.2f} turnovers per game.",
+            "{val:.2f} TOV per game — turnover-prone."
         ],
         "medium": [
-            "Turns it over a bit: {val:.1f} per game.",
-            "{val:.1f} TOV — manageable, but could be better."
+            "Turns it over a bit: {val:.2f} per game.",
+            "{val:.2f} TOV — manageable, but could be better."
         ],
         "low": [
-            "Protects the ball well: {val:.1f} turnovers per game.",
-            "Low turnover rate — just {val:.1f} TOV."
+            "Protects the ball well: {val:.2f} turnovers per game.",
+            "Low turnover rate — just {val:.2f} TOV."
         ]
     },
     "min_pg": {
         "high": [
-            "Heavy minutes: {val:.1f} per game.",
-            "{val:.1f} MPG, a key player on the floor."
+            "Heavy minutes: {val:.2f} per game.",
+            "{val:.2f} MPG, a key player on the floor."
         ],
         "medium": [
-            "Gets decent playing time: {val:.1f} minutes.",
-            "{val:.1f} MPG, trusted rotation piece."
+            "Gets decent playing time: {val:.2f} minutes.",
+            "{val:.2f} MPG, trusted rotation piece."
         ],
         "low": [
-            "Limited minutes, {val:.1f} per game.",
-            "{val:.1f} MPG — not always in the mix."
+            "Limited minutes, {val:.2f} per game.",
+            "{val:.2f} MPG — not always in the mix."
         ]
     }
 }
@@ -154,7 +154,7 @@ def generate_natural_response(target: str, pred: float):
     }
 
     if target not in STAT_RESPONSE_TEMPLATES:
-        return f"Prediction: {pred:.1f} {target.replace('_pg', '')} per game."
+        return f"Prediction: {pred:.2f} {target.replace('_pg', '')} per game."
 
     high, medium = thresholds.get(target, (float('inf'), 0))
 
@@ -276,3 +276,7 @@ def basic_predict():
         print(tb_str)
 
         return jsonify({'error': str(e), 'traceback': tb_str}), 500
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
