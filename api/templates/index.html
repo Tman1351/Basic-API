@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Court Sense AI's Basic API Status</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <main>
+      <header>
+        <span
+          class="live-indicator"
+          aria-label="Live indicator"
+          role="img"
+        ></span>
+        <h1>Court Sense Basic API is Running</h1>
+        <p>Your basketball prediction service is live and ready. 🏀</p>
+      </header>
+
+      <section
+        aria-label="Simulated AI conversation"
+        class="chat-simulation"
+        role="region"
+      >
+        <p>
+          <strong>You:</strong> Hey Iso, could you predict Lebron's points per
+          game for next season?
+        </p>
+        <p>
+          <strong>Iso:</strong>
+          <span
+            class="thinking-dots"
+            aria-live="polite"
+            aria-atomic="true"
+            style="display: none"
+          ></span>
+          <span class="typing" aria-live="polite" aria-atomic="true"></span>
+        </p>
+      </section>
+    </main>
+
+    <script>
+      const messages = [
+        "Of course! I Predict... 23.47 points per game.",
+        "I got you. Calculating... 7.12 points per game.",
+        "Here you go. Estimate: 10.03 points per game.",
+        "Yea sure! Projection: 31.5 points per game.",
+        "No worries just give me a second. Analysis complete: 17.7 points per game.",
+      ];
+
+      let index = 0;
+      const typingElement = document.querySelector(".typing");
+      const thinkingDots = document.querySelector(".thinking-dots");
+
+      function showThinking(callback) {
+        thinkingDots.textContent = "⠋"; // start the first dot symbol (unicode braille pattern)
+        thinkingDots.style.display = "inline";
+
+        const frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+        let frameIndex = 0;
+
+        const interval = setInterval(() => {
+          thinkingDots.textContent = frames[frameIndex];
+          frameIndex = (frameIndex + 1) % frames.length;
+        }, 100);
+
+        setTimeout(() => {
+          clearInterval(interval);
+          thinkingDots.style.display = "none";
+          callback();
+        }, 1500); // thinking for 1.5 seconds
+      }
+
+      function typeMessage(msg, callback) {
+        let i = 0;
+        typingElement.textContent = "";
+        typingElement.style.display = "inline";
+
+        const interval = setInterval(() => {
+          typingElement.textContent += msg.charAt(i);
+          i++;
+          if (i === msg.length) {
+            clearInterval(interval);
+            setTimeout(callback, 1500); // wait before next message
+          }
+        }, 50);
+      }
+
+      function startTypingLoop() {
+        // Clear previous prediction first
+        typingElement.textContent = "";
+        showThinking(() => {
+          typeMessage(messages[index], () => {
+            index = (index + 1) % messages.length;
+            startTypingLoop();
+          });
+        });
+      }
+
+      startTypingLoop();
+    </script>
+  </body>
+</html>

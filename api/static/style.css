@@ -1,0 +1,99 @@
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1c1f2b, #2c3451);
+  color: white;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Layout */
+main {
+  text-align: center;
+  animation: fadeIn 1s ease-in;
+}
+
+header h1 {
+  font-size: 2rem;
+  margin: 1rem 0 0.5rem;
+}
+
+header p {
+  color: #bbb;
+  font-size: 1rem;
+}
+
+/* Live indicator: pulsing glowing dot */
+.live-indicator {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  background-color: #b93bcc; /* Your brand purple */
+  box-shadow: 0 0 8px #b93bcc, 0 0 20px #b93bcc;
+  animation: heartbeat 1.5s infinite ease-in-out;
+}
+
+/* Animations */
+@keyframes heartbeat {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 8px #b93bcc, 0 0 20px #b93bcc;
+  }
+  50% {
+    transform: scale(1.3);
+    box-shadow: 0 0 15px #e37bfd, 0 0 40px #e37bfd;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chat-simulation {
+  margin-top: 3rem;
+  font-size: 1.1rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  background: rgba(255 255 255 / 0.05);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-family: "Courier New", Courier, monospace;
+  color: #e0d7f5;
+  box-shadow: 0 0 15px rgba(185, 59, 204, 0.3);
+}
+
+.chat-simulation p {
+  margin-bottom: 0.75rem;
+}
+
+.chat-simulation strong {
+  color: #b93bcc;
+}
+
+.thinking-dots {
+  font-family: monospace;
+  font-weight: bold;
+  color: #b93bcc;
+  margin-left: 0.25rem;
+  display: none;
+  user-select: none;
+}
