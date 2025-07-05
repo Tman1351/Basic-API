@@ -6,10 +6,10 @@ import traceback
 from joblib import load
 from random import choice
 
+app = Flask(__name__)
+
 path.append(os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..', '..')))
-
-app = Flask(__name__)
 
 STAT_RESPONSE_TEMPLATES = {
     "pts_pg": {
@@ -283,7 +283,15 @@ def basic_predict():
         print(tb_str)
 
         return jsonify({'error': str(e), 'traceback': tb_str}), 500
+    
+@app.route("/", methods=["GET"])
+def index():
+    return "CourtSense API is running."
+
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 10000))
+    app.run(host='0.0.0.0', port=port)
+
+
