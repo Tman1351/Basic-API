@@ -1,15 +1,15 @@
 from flask import Flask, request, jsonify
 import pandas as pd
-import sys
+from sys import path
 import os
 import traceback
-import os
 from joblib import load
-import random
+from random import choice
+
+path.append(os.path.abspath(os.path.join(
+    os.path.dirname(__file__), '..', '..')))
 
 app = Flask(__name__)
-
-import random
 
 STAT_RESPONSE_TEMPLATES = {
     "pts_pg": {
@@ -153,19 +153,26 @@ def generate_natural_response(target: str, pred: float):
         "min_pg": (25, 17)
     }
 
+    zero_templates = [
+        'This player makes no contribution in this stat... Like at all. 😓 Complete zero.', 'I Predicted... 0.',
+        'I think 0.', "The answer issss... a  B I G  f a t  zero. 😔", 'They average nothing at all in that.', 'I predict 0️⃣. 😂', 'Dang. They would most likely average 0.'
+    ]
+
     if target not in STAT_RESPONSE_TEMPLATES:
         return f"Prediction: {pred:.2f} {target.replace('_pg', '')} per game."
 
     high, medium = thresholds.get(target, (float('inf'), 0))
 
-    if pred >= high:
+    if pred <= 0:
+        return choice(zero_templates)
+    elif pred >= high:
         category = "high"
     elif pred >= medium:
         category = "medium"
     else:
         category = "low"
 
-    sentence = random.choice(STAT_RESPONSE_TEMPLATES[target][category])
+    sentence = choice(STAT_RESPONSE_TEMPLATES[target][category])
     return sentence.format(val=pred)
 
 
@@ -183,10 +190,6 @@ def load_one(name):
     return model
 
 
-# Add the project root (Court Sense ai) to sys.path
-sys.path.append(os.path.abspath(os.path.join(
-    os.path.dirname(__file__), '..', '..')))
-
 
 @app.route("/basic-predict", methods=['POST'])
 def basic_predict():
@@ -194,6 +197,13 @@ def basic_predict():
     valid_models = ['pts_pg', 'ast_pg', 'blk_pg', 'reb_pg', 'gp', 'gs',
                     'fga_pg', 'height', 'fg3a_pg',
                     'fta_pg', 'tov_pg', 'min_pg', 'ts_pct']
+    
+    valid_targets = ['ast_pg', 'blk_pg', 'fg3a_pg', 'fga_pg', 'fta_pg', 'min_pg', 'pts_pg', 'reb_pg', 'tov_pg']
+
+    required_features = [
+            'pts_pg', 'ast_pg', 'blk_pg', 'reb_pg', 'gp', 'gs', 'fga_pg', 'height',
+            'bodyWeight', 'fg3a_pg', 'fta_pg', 'tov_pg', 'min_pg', 'ts_pct'
+        ]
 
     try:
 
@@ -207,17 +217,14 @@ def basic_predict():
 
         if target not in valid_models:
             return jsonify({'error': "'target' was not a valid model"}), 400
-
-        if target in features:
+        elif target in features:
             return jsonify({
                 "error": f"'{target}' should not be included in 'features'. It's the target, not an input."
             }), 400
+        elif target not in valid_targets:
+            return jsonify({'error': f"'{target}' is not allowed to be predicted as of now. Reasons may be because of low accuracy or unstability"}), 400
 
-        required_features = [
-            'pts_pg', 'ast_pg', 'blk_pg', 'reb_pg', 'gp', 'gs', 'fga_pg', 'height',
-            'bodyWeight', 'fg3a_pg', 'fta_pg', 'tov_pg', 'min_pg', 'ts_pct'
-        ]
-
+        
         unexpected_keys = [
             key for key in features if key not in required_features]
 
