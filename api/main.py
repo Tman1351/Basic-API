@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import pandas as pd
 from sys import path
 import os
@@ -14,131 +14,159 @@ path.append(os.path.abspath(os.path.join(
 STAT_RESPONSE_TEMPLATES = {
     "pts_pg": {
         "high": [
-            "Scoring machine! {val:.2f} points per game is elite.",
-            "{val:.2f} PPG? This player is lighting it up!"
+            "Based on the input, I project a high scoring output of {val:.2f} PPG.",
+            "The model predicts a top-tier scoring average: {val:.2f} points per game.",
+            "Expected to be a primary scorer with approximately {val:.2f} points each game."
         ],
         "medium": [
-            "{val:.2f} points per game, a reliable scorer.",
-            "Solid scorer with {val:.2f} PPG."
+            "Prediction suggests a moderate scoring role at {val:.2f} PPG.",
+            "{val:.2f} points per game is consistent with a solid offensive contributor.",
+            "Likely to contribute reliably with {val:.2f} points on average."
         ],
         "low": [
-            "Scoring is light, just {val:.2f} per game.",
-            "{val:.2f} PPG might not move the needle."
+            "The forecast indicates limited scoring impact at {val:.2f} points per game.",
+            "Projected to score minimally, around {val:.2f} PPG.",
+            "Not expected to be a major scorer, with an average of {val:.2f} points."
         ]
     },
     "ast_pg": {
         "high": [
-            "This player’s got vision, {val:.2f} assists per game!",
-            "Playmaker alert: {val:.2f} APG."
+            "Prediction points to advanced playmaking: {val:.2f} assists per game.",
+            "{val:.2f} APG suggests a high-volume distributor.",
+            "Expected to facilitate the offense efficiently with {val:.2f} assists."
         ],
         "medium": [
-            "A decent distributor with {val:.2f} assists per game.",
-            "{val:.2f} APG, moving the ball well."
+            "Model expects solid distribution skills: {val:.2f} APG.",
+            "{val:.2f} assists per game implies dependable ball movement.",
+            "A moderate level of playmaking is predicted at {val:.2f} APG."
         ],
         "low": [
-            "Not much of a passer, only {val:.2f} APG.",
-            "{val:.2f} assists per game, minimal playmaking."
+            "Prediction indicates limited assists: {val:.2f} per game.",
+            "Low assist average expected — approximately {val:.2f} per game.",
+            "{val:.2f} APG implies minimal involvement in playmaking duties."
         ]
     },
     "blk_pg": {
         "high": [
-            "A defensive wall, {val:.2f} blocks per game!",
-            "Shot blocker alert: {val:.2f} BPG."
+            "Projected to be a strong rim protector with {val:.2f} blocks per game.",
+            "Defensive impact expected to be high: {val:.2f} BPG.",
+            "Model predicts consistent shot blocking at {val:.2f} blocks per game."
         ],
         "medium": [
-            "Respectable rim protection at {val:.2f} blocks.",
-            "Averaging {val:.2f} BPG, holding it down."
+            "Forecast suggests moderate rim protection: {val:.2f} BPG.",
+            "{val:.2f} blocks per game indicates a respectable defensive presence.",
+            "Expected to contest shots occasionally with {val:.2f} BPG."
         ],
         "low": [
-            "Just {val:.2f} blocks, not much rim protection.",
-            "This player doesn’t block much: {val:.2f} per game."
+            "Low block output anticipated at {val:.2f} per game.",
+            "Minimal rim protection likely: {val:.2f} BPG.",
+            "Blocking is not expected to be a key contribution — {val:.2f} per game."
         ]
     },
     "reb_pg": {
         "high": [
-            "Board beast! {val:.2f} rebounds a game.",
-            "{val:.2f} RPG — always cleaning the glass."
+            "Projection suggests strong rebounding presence: {val:.2f} RPG.",
+            "Expected to dominate the boards with {val:.2f} rebounds per game.",
+            "{val:.2f} rebounds per game indicates high involvement in securing possessions."
         ],
         "medium": [
-            "Decent rebounding with {val:.2f} per game.",
-            "Solid rebounder: {val:.2f} RPG."
+            "Forecast predicts a decent rebounding average: {val:.2f} RPG.",
+            "Model indicates solid contribution on the glass at {val:.2f} rebounds.",
+            "Predicted to rebound at a steady clip: {val:.2f} RPG."
         ],
         "low": [
-            "Light on rebounds — {val:.2f} per game.",
-            "{val:.2f} RPG — might need more hustle."
+            "Rebounding may be a weak area — {val:.2f} RPG forecasted.",
+            "Low rebounding numbers expected at around {val:.2f} per game.",
+            "{val:.2f} rebounds suggest limited impact on the boards."
         ]
     },
     "fga_pg": {
         "high": [
-            "{val:.2f} shots a game — volume scorer!",
-            "Letting it fly with {val:.2f} FGA per game."
+            "Model projects high shooting volume: {val:.2f} FGA per game.",
+            "{val:.2f} shots per game expected — primary scoring option.",
+            "Heavy usage projected with {val:.2f} field goal attempts."
         ],
         "medium": [
-            "Takes a moderate {val:.2f} shots per game.",
-            "{val:.2f} FGA — knows when to shoot."
+            "Expected to take a balanced number of shots: {val:.2f} FGA.",
+            "Moderate field goal volume predicted at {val:.2f} attempts per game.",
+            "The player is projected to take about {val:.2f} shots per game."
         ],
         "low": [
-            "Only {val:.2f} shots a game — selective shooter.",
-            "Low volume: {val:.2f} FGA."
+            "Shooting frequency is low — around {val:.2f} FGA per game.",
+            "Minimal shot attempts forecasted at {val:.2f} per game.",
+            "Not projected to shoot often — {val:.2f} attempts on average."
         ]
     },
     "fg3a_pg": {
         "high": [
-            "Shooting from deep — {val:.2f} threes per game.",
-            "{val:.2f} 3PA — living beyond the arc!"
+            "High volume of three-point attempts projected: {val:.2f} per game.",
+            "{val:.2f} 3PA suggests frequent perimeter shooting.",
+            "Model indicates a strong focus beyond the arc — {val:.2f} threes attempted."
         ],
         "medium": [
-            "Comfortable from range, {val:.2f} 3PA.",
-            "Shooting some threes: {val:.2f} per game."
+            "Moderate three-point activity expected — {val:.2f} attempts per game.",
+            "Prediction suggests balanced perimeter involvement: {val:.2f} 3PA.",
+            "{val:.2f} three-point attempts per game is a healthy middle ground."
         ],
         "low": [
-            "Rarely takes threes, only {val:.2f} per game.",
-            "Low 3-point volume: {val:.2f} 3PA."
+            "Low three-point volume expected at {val:.2f} per game.",
+            "Not likely to take many threes — only {val:.2f} per game forecasted.",
+            "{val:.2f} 3PA implies limited shooting from deep."
         ]
     },
     "fta_pg": {
         "high": [
-            "Gets to the line often, {val:.2f} FTA per game.",
-            "{val:.2f} free throws per game, aggressive!"
+            "Aggressive driving projected — {val:.2f} FTA per game.",
+            "Player expected to draw a high number of fouls: {val:.2f} free throws.",
+            "The model indicates frequent trips to the line at {val:.2f} attempts."
         ],
         "medium": [
-            "Draws some contact: {val:.2f} FTA.",
-            "{val:.2f} free throws per game — decent pressure."
+            "Predicted to earn some free throws — around {val:.2f} per game.",
+            "Moderate foul drawing expected at {val:.2f} FTA.",
+            "{val:.2f} free throw attempts indicates decent paint pressure."
         ],
         "low": [
-            "Doesn’t draw many fouls — {val:.2f} FTA.",
-            "Low free throw attempts: {val:.2f}."
+            "Low frequency of free throws — {val:.2f} FTA predicted.",
+            "Minimal contact drawn — only {val:.2f} trips to the line per game.",
+            "Free throw attempts are not expected to be high — just {val:.2f}."
         ]
     },
     "tov_pg": {
         "high": [
-            "Careless with the ball — {val:.2f} turnovers per game.",
-            "{val:.2f} TOV per game — turnover-prone."
+            "Model forecasts high turnover risk — {val:.2f} per game.",
+            "Possession control could be a concern with {val:.2f} TOV.",
+            "{val:.2f} turnovers projected, indicating loose ball security."
         ],
         "medium": [
-            "Turns it over a bit: {val:.2f} per game.",
-            "{val:.2f} TOV — manageable, but could be better."
+            "Turnovers projected at a manageable level — {val:.2f} per game.",
+            "Ball security is fair, with {val:.2f} TOV predicted.",
+            "{val:.2f} turnovers suggest average handling under pressure."
         ],
         "low": [
-            "Protects the ball well: {val:.2f} turnovers per game.",
-            "Low turnover rate — just {val:.2f} TOV."
+            "Possession expected to be well-managed — {val:.2f} turnovers.",
+            "Low turnover risk forecasted: {val:.2f} TOV per game.",
+            "{val:.2f} turnovers shows strong ball control."
         ]
     },
     "min_pg": {
         "high": [
-            "Heavy minutes: {val:.2f} per game.",
-            "{val:.2f} MPG, a key player on the floor."
+            "Model suggests heavy minutes — around {val:.2f} MPG.",
+            "Player is expected to be a major rotation piece with {val:.2f} minutes.",
+            "{val:.2f} minutes per game indicates a core role."
         ],
         "medium": [
-            "Gets decent playing time: {val:.2f} minutes.",
-            "{val:.2f} MPG, trusted rotation piece."
+            "Moderate playing time expected — about {val:.2f} minutes.",
+            "Projection shows decent rotation usage: {val:.2f} MPG.",
+            "{val:.2f} minutes suggests steady floor presence."
         ],
         "low": [
-            "Limited minutes, {val:.2f} per game.",
-            "{val:.2f} MPG — not always in the mix."
+            "Limited playing time forecasted — only {val:.2f} minutes.",
+            "{val:.2f} MPG suggests a smaller role in the rotation.",
+            "Not expected to log many minutes — around {val:.2f} per game."
         ]
     }
 }
+
 
 def generate_natural_response(target: str, pred: float):
     thresholds = {
@@ -150,7 +178,7 @@ def generate_natural_response(target: str, pred: float):
         "fg3a_pg": (7, 3),
         "fta_pg": (6, 3),
         "tov_pg": (3.5, 1.5),
-        "min_pg": (25, 17)
+        "min_pg": (25, 11)
     }
 
     zero_templates = [
@@ -174,7 +202,6 @@ def generate_natural_response(target: str, pred: float):
 
     sentence = choice(STAT_RESPONSE_TEMPLATES[target][category])
     return sentence.format(val=pred)
-
 
 
 def load_one(name):
@@ -286,7 +313,7 @@ def basic_predict():
     
 @app.route("/", methods=["GET"])
 def index():
-    return "CourtSense API is running."
+    return render_template('index.html')
 
 
 
